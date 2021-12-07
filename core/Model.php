@@ -13,6 +13,8 @@ class Model
     const RULE_MAX = 'max';
     const RULE_MATCH = 'match';
     const RULE_UNIQUE = 'unique';
+    const RULE_AFTER_TODAY = 'after_today';
+    const RULE_DATE_VALID = 'date_valid';
 
     public array $errors = [];
 
@@ -54,6 +56,9 @@ class Model
                 if (!is_string($rule)) {
                     $ruleName = $rule[0];
                 }
+                if ($ruleName == self::RULE_AFTER_TODAY && round((strToTime("now") - strToTime($value)) / (60 * 60 * 24)) >= 0) {
+                    $this->addErrorByRule($attribute, self::RULE_AFTER_TODAY);
+                }
                 if ($ruleName === self::RULE_REQUIRED && !$value) {
                     $this->addErrorByRule($attribute, self::RULE_REQUIRED);
                 }
@@ -88,9 +93,10 @@ class Model
         return empty($this->errors);
     }
 
-    #[ArrayShape([self::RULE_REQUIRED => "string", self::RULE_EMAIL => "string", self::RULE_MIN => "string", self::RULE_MAX => "string", self::RULE_MATCH => "string", self::RULE_UNIQUE => "string"])] public function errorMessages(): array
+    #[ArrayShape([self::RULE_AFTER_TODAY => "string", self::RULE_REQUIRED => "string", self::RULE_EMAIL => "string", self::RULE_MIN => "string", self::RULE_MAX => "string", self::RULE_MATCH => "string", self::RULE_UNIQUE => "string"])] public function errorMessages(): array
     {
         return [
+            self::RULE_AFTER_TODAY => 'The reservation cannot be in the past.',
             self::RULE_REQUIRED => 'This field is required',
             self::RULE_EMAIL => 'This field must be valid email address',
             self::RULE_MIN => 'Min length of this field must be {min}',

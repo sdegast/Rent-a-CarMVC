@@ -19,15 +19,19 @@ $factuurnr = 202100
         </thead>
         <tbody>
         <?php
-        foreach (Application::$app->cars as $car) {
-            if ($car->getCurrentOwner() === Application::$app->user->getDisplayName()) { ?>
-                <tr>
-                    <td>AB<?= $factuurnr = $factuurnr + 1 ?></td>
-                    <td><?= $car->getCarName() ?></td>
-                    <td>1 dag</td>
-                    <td><?= $car->getPrice() ?>,-</td>
-                </tr>
-          <?php  }
+        foreach (Application::$app->reserveringen as $reservering) {
+            if ($reservering->getUserId() === Application::$app->user->getUserId()) {
+                foreach (Application::$app->cars as $car) {
+                    if ($car->getCarId() === $reservering->getCarId()) { ?>
+                        <tr>
+                            <td>AB<?= $factuurnr = $factuurnr + 1 ?></td>
+                            <td><?= $car->getCarName() ?></td>
+                            <td><?= $reservering->getStartDatum() . ' tot ' . $reservering->getEindDatum();?></td>
+                            <td>Prijs per dag: €<?= $car->getPrice() ?>,-</td>
+                        </tr>
+                    <?php }
+                }
+              }
         } ?>
         </tbody>
     </table>

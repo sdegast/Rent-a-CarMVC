@@ -9,6 +9,7 @@ use app\core\middlewares\AuthMiddleware;
 use app\core\Request;
 use app\core\Response;
 use app\models\LoginForm;
+use app\models\Reservering;
 use app\models\User;
 
 class AuthController extends Controller
@@ -56,15 +57,18 @@ class AuthController extends Controller
     public function reserve(Request $request, Response $response)
     {
         if ($request->isPost()) {
-            $carId = $request->getBody()['carId'];
-            if (Application::$app->reserveCar($carId)) {
+            $requestData = $request->getBody();
+            $reservering = new Reservering($requestData['startdatum'], $requestData['einddatum'], $requestData['userid'], $requestData['carid'], );
+            if ($reservering->validate() && $reservering->dateCheck($requestData['startdatum'], $requestData['einddatum']) && $reservering->save()) {
                 Application::$app->session->setFlash('success', 'Reservering is geplaatst.');
+                $this->setLayout('sidebar');
+                $response->redirect('/catalogus');
             } else {
-                Application::$app->session->setFlash('success', 'Something went wrong.');
+                Application::$app->session->setFlash('failure', 'Reserveringperiode is ongeldig.');
+                $this->setLayout('sidebar');
+                $response->redirect('/car?id=' . $requestData['carid'] - 1);
             }
         }
-        $this->setLayout('sidebar');
-        $response->redirect('/catalogus');
     }
 
     public function loggedin(): string
@@ -116,4 +120,5 @@ class AuthController extends Controller
             throw new ForbiddenException();
         }
     }
+
 }

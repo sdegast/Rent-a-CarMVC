@@ -10,16 +10,14 @@ class Car extends CarModel
     private string $carname = '';
     private int $cardailyprice;
     private int $carseats;
-    private string $carcurrentowner;
     private string $carimg;
 
-    public function __construct($id, $carname, $cardailyprice, $carseats, $carcurrentowner, $carimg)
+    public function __construct($id, $carname, $cardailyprice, $carseats, $carimg)
     {
         $this->id = $id;
         $this->carname = $carname;
         $this->cardailyprice = $cardailyprice;
         $this->carseats = $carseats;
-        $this->carcurrentowner = $carcurrentowner;
         $this->carimg = $carimg;
     }
 
@@ -40,11 +38,6 @@ class Car extends CarModel
 
     public function getCarImg(): string{
         return $this->carimg;
-    }
-
-    public function getCurrentOwner(): string
-    {
-        return $this->carcurrentowner;
     }
 
     public function getPrice(): int

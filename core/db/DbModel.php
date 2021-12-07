@@ -6,6 +6,7 @@ use app\core\Application;
 use app\core\Model;
 use app\core\db\Database;
 use app\models\Car;
+use app\models\Reservering;
 use PDO;
 
 abstract class DbModel extends Model
@@ -48,7 +49,7 @@ abstract class DbModel extends Model
         return $statement->fetchObject(static::class);
     }
 
-    public static function findAll(): bool|array
+    public static function findAllCars(): bool|array
     {
         $tableName = static::tableName();
         $statement = self::prepare("SELECT * FROM $tableName");
@@ -57,10 +58,25 @@ abstract class DbModel extends Model
         $cars = [];
         foreach ($t as $key => $item) {
             $newCar = new Car($item->id, $item->carname,
-                $item->cardailyprice, $item->carseats, $item->carcurrentowner, $item->carimg);
+                $item->cardailyprice, $item->carseats, $item->carimg);
             array_push($cars, $newCar);
         }
         return $cars;
+    }
+
+    public static function findAllReserved(): bool|array
+    {
+        $tableName = static::tableName();
+        $statement = self::prepare("SELECT * FROM $tableName ORDER BY startdatum");
+        $statement->execute();
+        $t = $statement->fetchAll(PDO::FETCH_OBJ);
+        $reserveringen = [];
+        foreach ($t as $key => $item) {
+            $newReservering = new Reservering($item->startdatum,
+                $item->einddatum, $item->userid, $item->carid);
+            array_push($reserveringen, $newReservering);
+        }
+        return $reserveringen;
     }
 
     public static function updateOne($attributes, $values, $id): bool
@@ -72,9 +88,6 @@ abstract class DbModel extends Model
         }
         $sql = implode(', ', $updatedAttr);
         $statement = self::prepare("UPDATE $tableName SET $sql WHERE id = $id");
-        echo '<pre>';
-        var_dump($statement);
-        echo '<pre>';
         $statement->execute();
         return true;
     }

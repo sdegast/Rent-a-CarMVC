@@ -6,6 +6,7 @@ use app\controllers\AuthController;
 use app\controllers\SiteController;
 use app\core\Application;
 use app\models\Car;
+use app\models\Reservering;
 use app\models\User;
 use Dotenv\Dotenv;
 
@@ -15,6 +16,7 @@ $dotenv->load();
 $config = [
     'userClass' => User::class,
     'carClass' => Car::class,
+    'reserveringClass' => Reservering::class,
     'db' => [
         'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],

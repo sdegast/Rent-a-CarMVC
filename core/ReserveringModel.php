@@ -4,10 +4,11 @@ namespace app\core;
 
 use app\core\db\DbModel;
 
-class CarModel extends DbModel
+class ReserveringModel extends DbModel
 {
     public static function tableName(): string
     {
-        return 'car';
+        return 'reservering';
     }
+
 }

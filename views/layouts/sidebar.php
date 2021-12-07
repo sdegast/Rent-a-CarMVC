@@ -120,7 +120,6 @@
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
                     <li><a class="dropdown-item" href="/invoices">Facturen</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/changepass">Wachtwoord veranderen</a></li>
                     <li><a class="dropdown-item" href="/logout">Uitloggen</a></li>
                 </ul>
             </div>

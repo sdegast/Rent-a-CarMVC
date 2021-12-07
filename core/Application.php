@@ -29,12 +29,15 @@ class Application
 
     public array $cars;
     public string $carClass;
+    public array $reserveringen;
+    public string $reserveringClass;
 
     public function __construct($rootDir, $config)
     {
         $this->user = null;
         $this->userClass = $config['userClass'];
         $this->carClass = $config['carClass'];
+        $this->reserveringClass = $config['reserveringClass'];
         self::$ROOT_DIR = $rootDir;
         self::$app = $this;
         $this->request = new Request();
@@ -43,13 +46,20 @@ class Application
         $this->db = new Database($config['db']);
         $this->session = new Session();
         $this->view = new View();
-        $this->cars = $this->carClass::findAll();
+        $this->cars = $this->carClass::findAllCars();
+        $this->reserveringen = $this->reserveringClass::findAllReserved();
 
         $userId = Application::$app->session->get('user');
         if ($userId) {
             $key = $this->userClass::primaryKey();
             $this->user = $this->userClass::findOne([$key => $userId]);
         }
+    }
+
+    public function getUsername($id)
+    {
+        $key = $this->userClass::primaryKey();
+        return $this->userClass::findOne([$key => $id])->getDisplayName();
     }
 
     public static function isGuest(): bool
@@ -60,11 +70,6 @@ class Application
     #[Pure] public static function isAdmin(): bool
     {
         return self::$app->user->getRole() === Role::ROLE_ADMIN;
-    }
-
-    public function reserveCar(int $carId): bool
-    {
-        return $this->carClass::updateOne(array('carcurrentowner'), array("'". $this->user->getDisplayName() ."'"), $carId);
     }
 
     public function login(DbModel $user): bool

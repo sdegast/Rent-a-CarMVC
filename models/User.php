@@ -13,10 +13,11 @@ abstract class UserStatus {
 
 class User extends UserModel
 {
+    public int $id;
     public string $email = '';
     public int $status = UserStatus::STATUS_INACTIVE;
     public string $password = '';
-    public int $role;
+    public int $role = Role::ROLE_CUSTOMER;
     public string $passwordRepeat = '';
 
     public static function tableName(): string
@@ -64,5 +65,9 @@ class User extends UserModel
     public function getRole(): int
     {
         return $this->role;
+    }
+    public function getUserId(): int
+    {
+        return $this->id;
     }
 }

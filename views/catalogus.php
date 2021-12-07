@@ -26,7 +26,7 @@ $this->title = 'Catalogus';
                 <?php  echo Application::$app->session->getFlash('success'); ?>
             </div>
         <?php endif; ?>
-        <div style="text-align: center;"><h1>Auto Catalogus</h1></div>
+        <div style="text-align: center;"><h2>Auto Catalogus</h2></div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
             <?php foreach(Application::$app->cars as $car) { ?>
@@ -39,12 +39,10 @@ $this->title = 'Catalogus';
                             <h4><?= $car->getCarName(); ?></h4>
                         </div>
                         <div class="properties">
-                            <ul>
-                                <li><i class="fas fa-user-friends"></i><p><?= $car->getCarSeats(); ?> zitplaatsen</p></li>
-                                <li><i class="fas fa-tachometer-alt"></i><p>600km per huur</p></li>
-                                <li><i class="fas fa-suitcase"></i><p>1 grote koffer</p></li>
-                                <li><i class="fas fa-suitcase-rolling"></i><p>1 kleine koffer</p></li>
-                            </ul>
+                            <i class="fas fa-user-friends"></i>&nbsp;<?= $car->getCarSeats();?> zitplaatsen
+                            <br>
+                            <i class="fas fa-tachometer-alt"></i>&nbsp;600km per huur
+
                         </div>
                         <div class="d-flex justify-content-end align-items-center">
                             <a href="/car?id=<?= $car->getCarId() - 1; ?>">Reserveren</a>
